@@ -9,5 +9,3 @@ includes:
     taskfile: .taskfile/rust.yml
   utils:
     taskfile: .taskfile/utils.yml
-  agent:
-    taskfile: .taskfile/agent.yml
