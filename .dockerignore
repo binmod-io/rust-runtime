@@ -1,0 +1,17 @@
+target
+build
+deploy
+certs
+
+.chglog
+.devcontainer
+.gitlab
+.gitlab-ci.yml
+.gitignore
+.pre-commit-config.yaml
+.gitlint
+
+CHANGELOG.md
+README.md
+Taskfile.yml
+example.*.yaml

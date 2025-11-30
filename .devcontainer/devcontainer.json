@@ -1,0 +1,19 @@
+{
+    "name": "binmod-runtime-rs",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": "..",
+		"args": {
+			"VARIANT": "1.91_3.12"
+		}
+    },
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"rust-lang.rust-analyzer"
+			]
+		}
+	},
+	"postCreateCommand": "pre-commit install --install-hooks && rustc --version && python --version",
+	"remoteUser": "dev"
+}
