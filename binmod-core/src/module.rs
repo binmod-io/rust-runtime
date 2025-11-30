@@ -293,6 +293,12 @@ impl Module {
 
         self.store = Some(store);
 
+        if let Err(e) = self.typed_call::<()>("initialize", ()) {
+            if !matches!(e, ModuleError::FunctionNotFound(_)) {
+                return Err(e);
+            }
+        }
+
         Ok(self)
     }
 
@@ -683,6 +689,12 @@ impl AsyncModule {
         );
 
         self.store = Some(store);
+
+        if let Err(e) = self.typed_call::<()>("initialize", ()).await {
+            if !matches!(e, ModuleError::FunctionNotFound(_)) {
+                return Err(e);
+            }
+        }
 
         Ok(self)
     }

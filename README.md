@@ -263,6 +263,11 @@ let module = Module::builder()
 
 WebAssembly modules must be compiled with the WASI Preview 1 target. Modules created with any Binmod MDK are compatible with this runtime.
 
+## Backwards Compatibility
+
+This runtime is currently in an early stage. Future versions may introduce breaking changes until the API is stabilized. The API is
+considered stable starting from version 1.0.0.
+
 ## License
 
 MIT License
