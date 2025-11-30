@@ -72,7 +72,7 @@ jobs:
 
       - name: Publish to crates.io
         run: |
-          CRATES=("binmod-mdk-macros" "binmod-mdk-core" "binmod-mdk")
+          CRATES=("binmod-macros" "binmod-core" "binmod")
 
           for crate in "${CRATES[@]}"; do
             echo "Publishing $crate..."
