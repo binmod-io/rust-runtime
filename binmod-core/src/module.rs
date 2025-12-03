@@ -1,5 +1,5 @@
 use std::{collections::HashMap, path::Path, fs};
-use wasmtime::{Engine, Instance, InstancePre, Store, Module as WasmModule, Caller, Linker, Config, AsContextMut};
+use wasmtime::{Engine, Instance, InstancePre, Store, Module as WasmModule, Caller, Linker, Config, AsContextMut, AsContext};
 use wasmtime_wasi::p1;
 use serde::de::DeserializeOwned;
 
@@ -293,6 +293,38 @@ impl Module {
 
         self.store = Some(store);
 
+        // Invoke method `_initialize` directly through wasmtime's API
+        // instead of relying on invoking via binmod because binmod will try to invoke guest exported
+        // methods and crash if the initializer haven't been called yet.
+        if let Some(initialize_func) = self.instance
+            .as_ref()
+            .unwrap()
+            .get_func(
+                self.store
+                    .as_mut()
+                    .unwrap()
+                    .as_context_mut(),
+                "_initialize"
+            )
+        {
+            initialize_func
+                .typed::<(), ()>(
+                    self.store
+                        .as_ref()
+                        .unwrap()
+                        .as_context()
+                )?
+                .call(
+                    self.store
+                        .as_mut()
+                        .unwrap()
+                        .as_context_mut(),
+                    ()
+                )
+                .map_err(|e| ModuleError::InstantiationError(format!("failed to call _initialize: {}", e)))?;
+        }
+
+        // Now we invoke the binmod initializer `initialize` if it exists.
         if let Err(e) = self.typed_call::<()>("initialize", ()) {
             if !matches!(e, ModuleError::FunctionNotFound(_)) {
                 return Err(e);
@@ -690,6 +722,39 @@ impl AsyncModule {
 
         self.store = Some(store);
 
+        // Invoke method `_initialize` directly through wasmtime's API
+        // instead of relying on invoking via binmod because binmod will try to invoke guest exported
+        // methods and crash if the initializer haven't been called yet.
+        if let Some(initialize_func) = self.instance
+            .as_ref()
+            .unwrap()
+            .get_func(
+                self.store
+                    .as_mut()
+                    .unwrap()
+                    .as_context_mut(),
+                "_initialize"
+            )
+        {
+            initialize_func
+                .typed::<(), ()>(
+                    self.store
+                        .as_ref()
+                        .unwrap()
+                        .as_context()
+                )?
+                .call_async(
+                    self.store
+                        .as_mut()
+                        .unwrap()
+                        .as_context_mut(),
+                    ()
+                )
+                .await
+                .map_err(|e| ModuleError::InstantiationError(format!("failed to call _initialize: {}", e)))?;
+        }
+
+        // Now we invoke the binmod initializer `initialize` if it exists.
         if let Err(e) = self.typed_call::<()>("initialize", ()).await {
             if !matches!(e, ModuleError::FunctionNotFound(_)) {
                 return Err(e);
