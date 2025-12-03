@@ -1,4 +1,14 @@
 
+<a name="0.1.2"></a>
+## [0.1.2](https://github.com/binmod-io/rust-runtime/compare/0.1.1...0.1.2)
+
+> 2025-12-03
+
+### Fix
+
+* Ensure initializer executed at startup for golang based modules
+
+
 <a name="0.1.1"></a>
 ## [0.1.1](https://github.com/binmod-io/rust-runtime/compare/0.1.0...0.1.1)
 

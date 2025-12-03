@@ -8,8 +8,8 @@ license.workspace = true
 readme.workspace = true
 
 [dependencies]
-binmod-macros = { path = "../binmod-macros", version = "0.1.1" }
-binmod-core = { path = "../binmod-core", version = "0.1.1" }
+binmod-macros = { path = "../binmod-macros", version = "0.1.2" }
+binmod-core = { path = "../binmod-core", version = "0.1.2" }
 
 async-trait = { workspace = true }
 serde = { workspace = true }
